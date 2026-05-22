@@ -1,7 +1,7 @@
 const $ = sel => document.querySelector(sel);
 const $$ = sel => Array.from(document.querySelectorAll(sel));
 
-const views = { home: $('#view-home'), downloads: $('#view-downloads'), player: $('#view-player'), settings: $('#view-settings') };
+const views = { home: $('#view-home'), downloads: $('#view-downloads'), player: $('#view-player'), changelog: $('#view-changelog'), settings: $('#view-settings') };
 let resolved = null;
 let selectedIds = new Set();
 let appSettings = null;
@@ -495,6 +495,61 @@ $('#btnClearPlaylist').onclick = () => {
   $('#playerCover').style.backgroundImage = 'none';
   $('#btnPlay').classList.remove('playing');
   renderPlaylist();
+};
+
+let changelogLoaded = false;
+
+async function loadChangelog() {
+  const container = $('#changelogContent');
+  container.innerHTML = '<div class="muted" style="text-align:center;padding:40px 0">Loading changelog\u2026</div>';
+  try {
+    const releases = await window.api.fetchChangelog();
+    if (!releases || !releases.length) {
+      container.innerHTML = '<div class="muted" style="text-align:center;padding:40px 0">No releases found.</div>';
+      return;
+    }
+    container.innerHTML = '';
+    for (const release of releases) {
+      const el = document.createElement('div');
+      el.className = 'changelog-entry';
+      const date = release.date ? new Date(release.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : '';
+      el.innerHTML = `
+        <div class="changelog-header">
+          <span class="changelog-version">${esc(release.version)}</span>
+          <span class="changelog-date muted">${esc(date)}</span>
+        </div>
+        <div class="changelog-body">${formatChangelogBody(release.body)}</div>
+      `;
+      container.appendChild(el);
+    }
+    changelogLoaded = true;
+  } catch (e) {
+    container.innerHTML = `<div class="muted" style="text-align:center;padding:40px 0">Failed to load changelog: ${esc(e.message)}</div>`;
+  }
+}
+
+function formatChangelogBody(body) {
+  if (!body) return '<span class="muted">No release notes.</span>';
+  return body
+    .split('\n')
+    .map(line => {
+      line = line.trim();
+      if (!line) return '';
+      if (line.startsWith('# ')) return `<h3>${esc(line.slice(2))}</h3>`;
+      if (line.startsWith('## ')) return `<h4>${esc(line.slice(3))}</h4>`;
+      if (line.startsWith('- ') || line.startsWith('* ')) return `<li>${esc(line.slice(2))}</li>`;
+      return `<p>${esc(line)}</p>`;
+    })
+    .join('')
+    .replace(/(<li>.*<\/li>)/s, '<ul>$1</ul>');
+}
+
+$('#btnRefreshChangelog').onclick = () => loadChangelog();
+
+const origShowView = showView;
+showView = function(name) {
+  origShowView(name);
+  if (name === 'changelog' && !changelogLoaded) loadChangelog();
 };
 
 let updateInfo = null;

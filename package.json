@@ -28,7 +28,8 @@
       "src/**/*",
       "bin/**/*",
       "assets/**/*",
-      "themes-example/**/*"
+      "themes-example/**/*",
+      "node_modules/**/*"
     ],
     "extraResources": [
       {

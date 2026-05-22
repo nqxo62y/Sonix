@@ -31,6 +31,7 @@ contextBridge.exposeInMainWorld('api', {
 
   checkForUpdates: () => ipcRenderer.invoke('updater:check'),
   downloadAndInstallUpdate: url => ipcRenderer.invoke('updater:downloadAndInstall', url),
+  fetchChangelog: () => ipcRenderer.invoke('updater:changelog'),
   onUpdaterStatus: cb => {
     const l = (_e, msg) => cb(msg);
     ipcRenderer.on('updater:status', l);

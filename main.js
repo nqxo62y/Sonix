@@ -91,6 +91,22 @@ ipcMain.handle('spotify:resolve', (_e, url) => resolveSpotifyUrl(url));
 
 ipcMain.handle('updater:check', () => checkForUpdates());
 
+ipcMain.handle('updater:changelog', async () => {
+  try {
+    const res = await fetch('https://api.github.com/repos/nqxo62y/Sonix/releases?per_page=20', {
+      headers: { Accept: 'application/vnd.github.v3+json', 'User-Agent': 'Sonix-Updater' }
+    });
+    if (!res.ok) return [];
+    const data = await res.json();
+    return data.map(r => ({
+      version: r.tag_name || r.name || '',
+      date: r.published_at || r.created_at || '',
+      body: r.body || '',
+      url: r.html_url || ''
+    }));
+  } catch { return []; }
+});
+
 ipcMain.handle('updater:downloadAndInstall', async (_e, installerUrl) => {
   return downloadAndInstall(installerUrl, status => {
     if (win && !win.isDestroyed()) win.webContents.send('updater:status', status);
