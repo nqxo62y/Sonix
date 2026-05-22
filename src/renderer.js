@@ -366,6 +366,20 @@ let updateInfo = null;
     $('#savePath').value = appSettings.savePath;
   }
 
+  const offBinStatus = window.api.onBinariesStatus(msg => {
+    $('#loadingStatus').textContent = msg;
+  });
+
+  try {
+    $('#loadingStatus').textContent = 'Checking binaries…';
+    await window.api.ensureBinaries();
+  } catch (e) {
+    $('#loadingStatus').textContent = 'Error: ' + (e.message || 'Failed to download binaries');
+    await new Promise(r => setTimeout(r, 3000));
+  }
+
+  offBinStatus();
+
   $('#loadingStatus').textContent = 'Checking for updates…';
   try {
     updateInfo = await window.api.checkForUpdates();

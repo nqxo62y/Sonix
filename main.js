@@ -6,6 +6,7 @@ const { resolveSpotifyUrl, setCredentials } = require('./lib/spotify');
 const settings = require('./lib/settings');
 const themes = require('./lib/themes');
 const { checkForUpdates } = require('./lib/updater');
+const { ensureBinaries } = require('./lib/binSetup');
 
 let win;
 
@@ -88,6 +89,14 @@ ipcMain.handle('themes:openFolder', () => { shell.openPath(themes.getThemesPath(
 ipcMain.handle('spotify:resolve', (_e, url) => resolveSpotifyUrl(url));
 
 ipcMain.handle('updater:check', () => checkForUpdates());
+
+ipcMain.handle('binaries:ensure', async (_e) => {
+  return new Promise((resolve, reject) => {
+    ensureBinaries(status => {
+      if (win && !win.isDestroyed()) win.webContents.send('binaries:status', status);
+    }).then(() => resolve(true)).catch(err => reject(err));
+  });
+});
 
 ipcMain.handle('download:start', async (_e, payload) => {
   const { tracks, savePath, options } = payload;

@@ -31,6 +31,13 @@ contextBridge.exposeInMainWorld('api', {
 
   checkForUpdates: () => ipcRenderer.invoke('updater:check'),
 
+  ensureBinaries: () => ipcRenderer.invoke('binaries:ensure'),
+  onBinariesStatus: cb => {
+    const l = (_e, msg) => cb(msg);
+    ipcRenderer.on('binaries:status', l);
+    return () => ipcRenderer.removeListener('binaries:status', l);
+  },
+
   startDownload: payload => ipcRenderer.invoke('download:start', payload),
   cancelDownload: () => ipcRenderer.invoke('download:cancel'),
 
