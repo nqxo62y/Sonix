@@ -364,6 +364,33 @@ $('#btnResetSettings').onclick = async () => {
   toast('Settings reset');
 };
 
+$('#btnCheckUpdate').onclick = async () => {
+  $('#updateStatus').textContent = 'Checking…';
+  try {
+    const info = await window.api.checkForUpdates();
+    if (info && info.available) {
+      $('#updateStatus').textContent = `Update ${info.latest} available!`;
+      if (info.installerUrl) {
+        const offStatus = window.api.onUpdaterStatus(msg => { $('#updateStatus').textContent = msg; });
+        try {
+          await window.api.downloadAndInstallUpdate(info.installerUrl);
+          $('#updateStatus').textContent = 'Installing… app will restart.';
+        } catch (e) {
+          offStatus();
+          $('#updateStatus').textContent = 'Download failed. ';
+          window.api.openExternal(info.url);
+        }
+      } else {
+        window.api.openExternal(info.url);
+      }
+    } else {
+      $('#updateStatus').textContent = `v${info.current} — up to date`;
+    }
+  } catch {
+    $('#updateStatus').textContent = 'Check failed';
+  }
+};
+
 const audio = new Audio();
 let playlist = [];
 let playlistIndex = -1;

@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, dialog, shell, nativeTheme } = require('electron');
+const { app, BrowserWindow, ipcMain, dialog, shell, nativeTheme, nativeImage } = require('electron');
 const path = require('node:path');
 const fs = require('node:fs');
 const { downloadJob, cancelAll } = require('./lib/downloader');
@@ -16,6 +16,9 @@ function createWindow() {
     setCredentials(s.spotifyClientId, s.spotifyClientSecret);
   }
 
+  const iconPath = path.join(__dirname, 'assets', 'icon.ico');
+  const appIcon = fs.existsSync(iconPath) ? nativeImage.createFromPath(iconPath) : undefined;
+
   win = new BrowserWindow({
     width: 1180,
     height: 760,
@@ -25,6 +28,7 @@ function createWindow() {
     frame: false,
     titleBarStyle: 'hidden',
     title: 'Sonix',
+    icon: appIcon,
     show: false,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
@@ -35,7 +39,6 @@ function createWindow() {
   });
 
   win.loadFile(path.join(__dirname, 'src', 'index.html'));
-  win.setIcon(path.join(__dirname, 'assets', 'icon.ico'));
   win.once('ready-to-show', () => win.show());
 }
 
