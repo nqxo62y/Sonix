@@ -6,9 +6,9 @@
   "scripts": {
     "start": "electron .",
     "build": "electron-builder",
-    "build:win": "electron-builder --win",
-    "build:portable": "electron-builder --win portable",
-    "build:dir": "electron-builder --dir"
+    "build:win": "set CSC_IDENTITY_AUTO_DISCOVERY=false && electron-builder --win",
+    "build:portable": "set CSC_IDENTITY_AUTO_DISCOVERY=false && electron-builder --win portable",
+    "build:dir": "set CSC_IDENTITY_AUTO_DISCOVERY=false && electron-builder --dir"
   },
   "build": {
     "appId": "com.sonix.app",
@@ -39,8 +39,7 @@
       ],
       "icon": "build/icon.ico",
       "artifactName": "${productName}-${version}-Setup.${ext}",
-      "signAndEditExecutable": false,
-      "sign": false
+      "signAndEditExecutable": false
     },
     "nsis": {
       "oneClick": false,
