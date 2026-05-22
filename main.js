@@ -105,13 +105,48 @@ ipcMain.handle('binaries:ensure', async (_e) => {
   });
 });
 
+ipcMain.handle('music:scanFolder', async (_e, folder) => {
+  const audioExts = ['.mp3', '.m4a', '.flac', '.wav', '.ogg', '.aac', '.wma'];
+  const results = [];
+  function walk(dir) {
+    let entries;
+    try { entries = fs.readdirSync(dir, { withFileTypes: true }); } catch { return; }
+    for (const entry of entries) {
+      const full = path.join(dir, entry.name);
+      if (entry.isDirectory()) { walk(full); continue; }
+      const ext = path.extname(entry.name).toLowerCase();
+      if (!audioExts.includes(ext)) continue;
+      const name = path.basename(entry.name, ext);
+      const parts = name.includes(' - ') ? name.split(' - ') : [name];
+      results.push({
+        path: full,
+        title: parts.length > 1 ? parts[0].trim() : name,
+        artist: parts.length > 1 ? parts.slice(1).join(' - ').trim() : '',
+        duration: 0,
+        cover: null
+      });
+    }
+  }
+  walk(folder);
+  return results;
+});
+
 ipcMain.handle('download:start', async (_e, payload) => {
   const { tracks, savePath, options } = payload;
   if (!fs.existsSync(savePath)) fs.mkdirSync(savePath, { recursive: true });
   return downloadJob({
     jobId: payload.jobId,
     tracks, savePath, options,
-    onProgress: data => { if (win && !win.isDestroyed()) win.webContents.send('download:progress', data); },
+    onProgress: data => {
+      if (win && !win.isDestroyed()) win.webContents.send('download:progress', data);
+      if (data.type === 'done' && !data.cancelled) {
+        const { Notification } = require('electron');
+        if (Notification.isSupported()) {
+          const saved = (data.results || []).filter(r => r.ok && !r.skipped).length;
+          new Notification({ title: 'Sonix', body: `Download complete \u2014 ${saved} tracks saved.`, icon: path.join(__dirname, 'assets', 'icon.ico') }).show();
+        }
+      }
+    },
     onLog: msg => { if (win && !win.isDestroyed()) win.webContents.send('download:log', msg); }
   });
 });

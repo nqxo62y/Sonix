@@ -44,6 +44,8 @@ contextBridge.exposeInMainWorld('api', {
     return () => ipcRenderer.removeListener('binaries:status', l);
   },
 
+  scanMusicFolder: folder => ipcRenderer.invoke('music:scanFolder', folder),
+
   startDownload: payload => ipcRenderer.invoke('download:start', payload),
   cancelDownload: () => ipcRenderer.invoke('download:cancel'),
 

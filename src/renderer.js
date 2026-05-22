@@ -1,7 +1,7 @@
 const $ = sel => document.querySelector(sel);
 const $$ = sel => Array.from(document.querySelectorAll(sel));
 
-const views = { home: $('#view-home'), downloads: $('#view-downloads'), settings: $('#view-settings') };
+const views = { home: $('#view-home'), downloads: $('#view-downloads'), player: $('#view-player'), settings: $('#view-settings') };
 let resolved = null;
 let selectedIds = new Set();
 let appSettings = null;
@@ -266,6 +266,21 @@ $('#btnDownload').onclick = async () => {
     } else if (data.type === 'done') {
       $('#ovStatus').textContent = data.cancelled ? 'cancelled' : 'finished';
       if (!data.cancelled && appSettings.autoOpenFolder) window.api.openPath(lastSavePath);
+      if (!data.cancelled && data.results) {
+        const downloaded = data.results.filter(r => r.ok && !r.skipped && r.outPath);
+        if (downloaded.length) {
+          for (const r of downloaded) {
+            playlist.push({
+              path: r.outPath,
+              title: r.track.title || '',
+              artist: r.track.artist || '',
+              duration: (r.track.durationMs || 0) / 1000,
+              cover: r.track.cover || null
+            });
+          }
+          renderPlaylist();
+        }
+      }
     }
   });
   const offLog = window.api.onLog(msg => {
@@ -347,6 +362,134 @@ $('#btnResetSettings').onclick = async () => {
   await applyTheme();
   renderThemeGrid();
   toast('Settings reset');
+};
+
+const audio = new Audio();
+let playlist = [];
+let playlistIndex = -1;
+let shuffleOn = false;
+let repeatOn = false;
+
+function fmtTime(sec) {
+  const s = Math.round(sec || 0);
+  return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
+}
+
+function renderPlaylist() {
+  const ul = $('#playlist');
+  ul.innerHTML = '';
+  playlist.forEach((track, i) => {
+    const li = document.createElement('li');
+    li.className = i === playlistIndex ? 'active' : '';
+    li.innerHTML = `
+      <span class="pl-num">${i + 1}</span>
+      <div class="pl-info">
+        <div class="pl-title">${esc(track.title)}</div>
+        <div class="pl-artist">${esc(track.artist)}</div>
+      </div>
+      <span class="pl-dur">${fmtTime(track.duration)}</span>
+    `;
+    li.addEventListener('click', () => playTrack(i));
+    ul.appendChild(li);
+  });
+  $('#playlistCount').textContent = `${playlist.length} tracks`;
+}
+
+function playTrack(index) {
+  if (index < 0 || index >= playlist.length) return;
+  playlistIndex = index;
+  const track = playlist[index];
+  audio.src = track.path;
+  audio.play();
+  $('#playerTitle').textContent = track.title || 'Unknown';
+  $('#playerArtist').textContent = track.artist || '';
+  $('#playerCover').style.backgroundImage = track.cover ? `url("${track.cover}")` : 'none';
+  $('#btnPlay').classList.add('playing');
+  renderPlaylist();
+}
+
+$('#btnPlay').onclick = () => {
+  if (!audio.src) { if (playlist.length) playTrack(0); return; }
+  if (audio.paused) { audio.play(); $('#btnPlay').classList.add('playing'); }
+  else { audio.pause(); $('#btnPlay').classList.remove('playing'); }
+};
+
+$('#btnNext').onclick = () => {
+  if (!playlist.length) return;
+  let next = playlistIndex + 1;
+  if (shuffleOn) next = Math.floor(Math.random() * playlist.length);
+  if (next >= playlist.length) next = repeatOn ? 0 : playlist.length - 1;
+  playTrack(next);
+};
+
+$('#btnPrev').onclick = () => {
+  if (!playlist.length) return;
+  if (audio.currentTime > 3) { audio.currentTime = 0; return; }
+  let prev = playlistIndex - 1;
+  if (prev < 0) prev = repeatOn ? playlist.length - 1 : 0;
+  playTrack(prev);
+};
+
+$('#btnShuffle').onclick = () => {
+  shuffleOn = !shuffleOn;
+  $('#btnShuffle').classList.toggle('active', shuffleOn);
+};
+
+$('#btnRepeat').onclick = () => {
+  repeatOn = !repeatOn;
+  $('#btnRepeat').classList.toggle('active', repeatOn);
+};
+
+audio.addEventListener('timeupdate', () => {
+  if (!audio.duration) return;
+  const pct = (audio.currentTime / audio.duration) * 100;
+  $('#playerSeek').value = pct;
+  $('#playerCurrent').textContent = fmtTime(audio.currentTime);
+});
+
+audio.addEventListener('loadedmetadata', () => {
+  $('#playerDuration').textContent = fmtTime(audio.duration);
+  $('#playerSeek').value = 0;
+});
+
+audio.addEventListener('ended', () => {
+  $('#btnPlay').classList.remove('playing');
+  let next = playlistIndex + 1;
+  if (shuffleOn) next = Math.floor(Math.random() * playlist.length);
+  if (next >= playlist.length) { if (repeatOn) next = 0; else return; }
+  playTrack(next);
+});
+
+$('#playerSeek').addEventListener('input', e => {
+  if (!audio.duration) return;
+  audio.currentTime = (e.target.value / 100) * audio.duration;
+});
+
+$('#playerVolume').addEventListener('input', e => {
+  audio.volume = e.target.value / 100;
+});
+
+$('#btnLoadFolder').onclick = async () => {
+  const folder = await window.api.chooseFolder();
+  if (!folder) return;
+  const files = await window.api.scanMusicFolder(folder);
+  if (!files || !files.length) return toast('No audio files found');
+  playlist = files;
+  playlistIndex = -1;
+  renderPlaylist();
+  toast(`Loaded ${files.length} tracks`);
+};
+
+$('#btnClearPlaylist').onclick = () => {
+  audio.pause();
+  audio.src = '';
+  playlist = [];
+  playlistIndex = -1;
+  $('#playerTitle').textContent = 'No track loaded';
+  $('#playerArtist').textContent = '';
+  $('#playerCover').style.backgroundImage = 'none';
+  $('#btnPlay').classList.remove('playing');
+  renderPlaylist();
 };
 
 let updateInfo = null;

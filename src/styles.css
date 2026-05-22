@@ -646,3 +646,162 @@ select {
 ::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 999px; border: 2px solid var(--bg); }
 ::-webkit-scrollbar-thumb:hover { background: var(--text-faint); }
 ::-webkit-scrollbar-track { background: transparent; }
+
+.player-now {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin-bottom: 16px;
+  box-shadow: var(--shadow-md);
+}
+
+.player-cover {
+  width: 80px;
+  height: 80px;
+  border-radius: 8px;
+  background: var(--surface3) center/cover no-repeat;
+  border: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.player-info { flex: 1; min-width: 0; }
+.player-title { font-weight: 600; font-size: 16px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.player-artist { font-size: 13px; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.player-controls {
+  padding: 16px 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin-bottom: 16px;
+  box-shadow: var(--shadow-sm);
+}
+
+.player-seek {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.player-time {
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted);
+  min-width: 36px;
+  text-align: center;
+}
+
+.player-slider {
+  flex: 1;
+  appearance: none;
+  -webkit-appearance: none;
+  height: 4px;
+  background: var(--surface3);
+  border-radius: 999px;
+  outline: none;
+  cursor: pointer;
+}
+
+.player-slider::-webkit-slider-thumb {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 2px solid var(--accent-on);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+  cursor: pointer;
+  transition: transform 80ms ease;
+}
+
+.player-slider::-webkit-slider-thumb:hover { transform: scale(1.2); }
+
+.player-slider.vol { width: 100px; flex: none; }
+
+.player-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.player-btn {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 0;
+  border-radius: 50%;
+  color: var(--text);
+  cursor: pointer;
+  transition: background-color 120ms ease, transform 80ms ease;
+}
+
+.player-btn:hover { background: var(--surface2); }
+.player-btn:active { transform: scale(0.92); }
+.player-btn.play { width: 52px; height: 52px; background: var(--accent); color: var(--accent-on); }
+.player-btn.play:hover { background: var(--accent-soft); }
+.player-btn.small { width: 32px; height: 32px; color: var(--text-muted); }
+.player-btn.small.active { color: var(--accent); }
+
+.player-btn .ic-pause { display: none; }
+.player-btn.playing .ic-play { display: none; }
+.player-btn.playing .ic-pause { display: block; }
+
+.player-volume {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 12px;
+  color: var(--text-muted);
+}
+
+.playlist-header {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 4px 8px;
+  font-size: 12px;
+}
+
+.playlist {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 40vh;
+  overflow: auto;
+}
+
+.playlist li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background-color 120ms ease;
+}
+
+.playlist li:hover { background: var(--surface2); }
+.playlist li.active { background: var(--surface3); }
+
+.playlist li .pl-num {
+  font-size: 12px;
+  color: var(--text-faint);
+  width: 24px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.playlist li .pl-info { flex: 1; min-width: 0; }
+.playlist li .pl-title { font-size: 13px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.playlist li .pl-artist { font-size: 11px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.playlist li .pl-dur { font-size: 11px; color: var(--text-muted); font-variant-numeric: tabular-nums; }
