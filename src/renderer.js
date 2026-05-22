@@ -107,7 +107,7 @@ function populateCustomThemeSelect() {
   const sel = $('#setCustomTheme');
   sel.innerHTML = '<option value="">None (use built-in)</option>';
   for (const [key, theme] of Object.entries(allThemes)) {
-    if (!theme.custom) continue;
+    if (key === 'light' || key === 'dark') continue;
     const opt = document.createElement('option');
     opt.value = key;
     opt.textContent = theme.name || key;

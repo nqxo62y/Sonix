@@ -1,6 +1,10 @@
-<img src="assets/solix icon.ico" align="right" style="height: 6%; width: 6%;">
+<p align="center">
+  <img src="assets/solix icon.ico" width="120" height="120" alt="Sonix"/>
+  <br/><br/>
+  <strong style="font-size: 28px;">Sonix</strong>
+</p>
 
-# Sonix
+<h1 align="center">Sonix</h1>
 
 [![Latest Release](https://img.shields.io/github/v/release/nqxo62y/Sonix?label=Latest%20Release&color=007ec6)](https://github.com/nqxo62y/Sonix/releases)
 [![Downloads](https://img.shields.io/github/downloads/nqxo62y/Sonix/total?label=Downloads&color=007ec6)](https://github.com/nqxo62y/Sonix/releases)
