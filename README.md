@@ -14,7 +14,17 @@
 Sonix is a premium desktop application that downloads music from Spotify as high-quality audio files with embedded cover art and complete metadata. Built with Electron, it features a modern dark/light UI, custom themes, automatic updates, and zero-config setup.
 
 > [!CAUTION]
-> Users are responsible for any potential legal consequences that come with downloading music. The developers do not condone unauthorized downloading of copyrighted material and do not take any responsibility for user actions. We strongly encourage you to purchase music directly from artists to support their work.
+> **HAFTUNGSAUSSCHLUSS / DISCLAIMER**
+>
+> This software is provided **exclusively for educational and personal purposes**.
+>
+> The developer assumes **no liability whatsoever** for damages, legal consequences, or any other outcomes arising from the use of this software. Use is **entirely at the user's own risk and responsibility**.
+>
+> Diese Software wird **ausschließlich zu Bildungs- und persönlichen Zwecken** bereitgestellt.
+>
+> Der Entwickler übernimmt **keinerlei Haftung** für Schäden, rechtliche Konsequenzen oder sonstige Folgen, die durch die Nutzung dieser Software entstehen. Die Nutzung erfolgt **vollständig auf eigene Gefahr und Verantwortung** des Anwenders.
+>
+> Sonix does not host, store, or distribute any copyrighted content. It interacts with publicly available web services and does not circumvent any DRM.
 
 > [!NOTE]
 > Sonix automatically downloads all required dependencies (yt-dlp, ffmpeg) on first launch. No manual setup needed.
