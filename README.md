@@ -292,9 +292,31 @@ This program is distributed in the hope that it will be useful, but WITHOUT ANY 
 
 ## Legal
 
-This software is provided for **educational and personal use only**. Sonix does not host, store, or distribute any copyrighted content. It interacts with publicly available web services and does not circumvent any DRM.
+> [!CAUTION]
+> **HAFTUNGSAUSSCHLUSS / DISCLAIMER**
+>
+> Diese Software wird **ausschließlich zu Bildungs- und persönlichen Zwecken** bereitgestellt.
+>
+> Der Entwickler übernimmt **keinerlei Haftung** für Schäden, rechtliche Konsequenzen oder sonstige Folgen, die durch die Nutzung dieser Software entstehen. Die Nutzung erfolgt **vollständig auf eigene Gefahr und Verantwortung** des Anwenders.
+>
+> Sonix hostet, speichert oder verbreitet keine urheberrechtlich geschützten Inhalte. Die Software interagiert lediglich mit öffentlich zugänglichen Webdiensten und umgeht keinerlei DRM-Schutzmaßnahmen.
 
-Users are solely responsible for ensuring compliance with all applicable laws. The developers do not assume any liability for how this software is used. By using Sonix, you acknowledge full responsibility for your actions.
+**By using this software, you agree to the following:**
+
+1. The developer provides this software **"AS IS"** without warranty of any kind, express or implied.
+2. The developer is **not liable** for any direct, indirect, incidental, special, or consequential damages arising from the use or inability to use this software.
+3. The developer is **not responsible** for any legal consequences resulting from the user's actions with this software.
+4. Users are **solely responsible** for ensuring their use complies with all applicable local, national, and international laws, including copyright law and the terms of service of third-party platforms.
+5. The developer does **not condone or encourage** unauthorized downloading, reproduction, or distribution of copyrighted material.
+6. Users are **strongly encouraged** to purchase music directly from artists and rights holders.
+
+**Durch die Nutzung dieser Software erklären Sie sich mit Folgendem einverstanden:**
+
+1. Der Entwickler stellt diese Software **ohne jegliche Gewährleistung** zur Verfügung.
+2. Der Entwickler haftet **nicht** für direkte, indirekte, zufällige, besondere oder Folgeschäden, die aus der Nutzung oder Unmöglichkeit der Nutzung dieser Software entstehen.
+3. Der Entwickler ist **nicht verantwortlich** für rechtliche Konsequenzen, die sich aus den Handlungen des Nutzers mit dieser Software ergeben.
+4. Nutzer sind **allein verantwortlich** für die Einhaltung aller geltenden Gesetze.
+5. Der Entwickler **befürwortet oder ermutigt nicht** das unbefugte Herunterladen urheberrechtlich geschützter Inhalte.
 
 If you are a rights holder with concerns, please open an issue.
 
