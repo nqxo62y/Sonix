@@ -59,6 +59,10 @@
             <svg class="ic-moon" viewBox="0 0 24 24" width="16" height="16"><path d="M21 12.8A9 9 0 0 1 11.2 3 9 9 0 1 0 21 12.8z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
             <span class="theme-label">Dark</span>
           </button>
+          <button class="update-btn" id="btnUpdateAvailable" hidden>
+            <svg viewBox="0 0 24 24" width="14" height="14"><path d="M12 3v13m0 0l-5-5m5 5l5-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span id="updateBtnText">Update available</span>
+          </button>
           <div class="update-badge" id="updateBadge" hidden>
             <svg viewBox="0 0 24 24" width="14" height="14"><path d="M12 3v13m0 0l-5-5m5 5l5-5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
             <span>Update available</span>
@@ -306,13 +310,6 @@
                 <label class="switch"><input id="setAutoOpen" type="checkbox" /><span>Open folder when finished</span></label>
                 <label class="switch"><input id="setNotifications" type="checkbox" /><span>Show notifications</span></label>
                 <label class="switch"><input id="setCompactList" type="checkbox" /><span>Compact track list</span></label>
-              </div>
-              <div style="margin-top:14px">
-                <button class="ghost" id="btnCheckUpdate">
-                  <svg viewBox="0 0 24 24" width="14" height="14"><path d="M1 4v6h6M23 20v-6h-6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                  Check for updates
-                </button>
-                <span class="muted" style="margin-left:12px;font-size:12px" id="updateStatus">v2.0.2</span>
               </div>
             </div>
 

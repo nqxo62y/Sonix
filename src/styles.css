@@ -870,3 +870,22 @@ select {
 .changelog-body p {
   margin: 4px 0;
 }
+
+.update-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  margin-top: 8px;
+  background: var(--success-bg);
+  border: 1px solid var(--success-border);
+  border-radius: var(--radius-sm);
+  color: var(--success);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 120ms ease, transform 80ms ease;
+}
+
+.update-btn:hover { opacity: 0.85; transform: scale(0.98); }

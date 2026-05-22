@@ -364,33 +364,6 @@ $('#btnResetSettings').onclick = async () => {
   toast('Settings reset');
 };
 
-$('#btnCheckUpdate').onclick = async () => {
-  $('#updateStatus').textContent = 'Checking…';
-  try {
-    const info = await window.api.checkForUpdates();
-    if (info && info.available) {
-      $('#updateStatus').textContent = `Update ${info.latest} available!`;
-      if (info.installerUrl) {
-        const offStatus = window.api.onUpdaterStatus(msg => { $('#updateStatus').textContent = msg; });
-        try {
-          await window.api.downloadAndInstallUpdate(info.installerUrl);
-          $('#updateStatus').textContent = 'Installing… app will restart.';
-        } catch (e) {
-          offStatus();
-          $('#updateStatus').textContent = 'Download failed. ';
-          window.api.openExternal(info.url);
-        }
-      } else {
-        window.api.openExternal(info.url);
-      }
-    } else {
-      $('#updateStatus').textContent = `v${info.current} — up to date`;
-    }
-  } catch {
-    $('#updateStatus').textContent = 'Check failed';
-  }
-};
-
 const audio = new Audio();
 let playlist = [];
 let playlistIndex = -1;
@@ -614,26 +587,24 @@ let updateInfo = null;
   try {
     updateInfo = await window.api.checkForUpdates();
     if (updateInfo && updateInfo.available) {
-      if (updateInfo.installerUrl) {
-        $('#loadingStatus').textContent = `Update ${updateInfo.latest} found. Downloading…`;
-        const offUpdaterStatus = window.api.onUpdaterStatus(msg => {
-          $('#loadingStatus').textContent = msg;
-        });
-        try {
-          await window.api.downloadAndInstallUpdate(updateInfo.installerUrl);
-          $('#loadingStatus').textContent = 'Installing update… App will restart.';
-          return;
-        } catch (e) {
-          offUpdaterStatus();
-          const badge = $('#updateBadge');
-          badge.hidden = false;
-          badge.addEventListener('click', () => window.api.openExternal(updateInfo.url));
+      const btn = $('#btnUpdateAvailable');
+      btn.hidden = false;
+      $('#updateBtnText').textContent = `Update to ${updateInfo.latest}`;
+      btn.addEventListener('click', async () => {
+        if (updateInfo.installerUrl) {
+          $('#updateBtnText').textContent = 'Downloading…';
+          const offStatus = window.api.onUpdaterStatus(msg => { $('#updateBtnText').textContent = msg; });
+          try {
+            await window.api.downloadAndInstallUpdate(updateInfo.installerUrl);
+            $('#updateBtnText').textContent = 'Installing…';
+          } catch {
+            offStatus();
+            window.api.openExternal(updateInfo.url);
+          }
+        } else {
+          window.api.openExternal(updateInfo.url);
         }
-      } else {
-        const badge = $('#updateBadge');
-        badge.hidden = false;
-        badge.addEventListener('click', () => window.api.openExternal(updateInfo.url));
-      }
+      });
     }
   } catch {}
 
