@@ -23,7 +23,9 @@
       "preload.js",
       "lib/**/*",
       "src/**/*",
-      "bin/**/*"
+      "bin/**/*",
+      "assets/**/*",
+      "themes-example/**/*"
     ],
     "extraResources": [
       {

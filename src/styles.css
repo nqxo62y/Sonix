@@ -22,14 +22,9 @@
   gap: 14px;
 }
 
-.loading-logo {
-  color: #f2f2f5;
-  animation: pulse 2s ease-in-out infinite;
-}
-
 @keyframes pulse {
   0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.6; transform: scale(0.96); }
+  50% { opacity: 0.7; transform: scale(0.96); }
 }
 
 .loading-text {
@@ -126,15 +121,13 @@ a { color: inherit; }
   font-size: 13px;
 }
 
-.brand .logo {
-  width: 22px;
-  height: 22px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 6px;
-  background: var(--surface3);
-  color: var(--text);
+.brand-icon {
+  border-radius: 4px;
+}
+
+.loading-logo {
+  animation: pulse 2s ease-in-out infinite;
+  border-radius: 12px;
 }
 
 .window-controls {

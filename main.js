@@ -35,6 +35,7 @@ function createWindow() {
   });
 
   win.loadFile(path.join(__dirname, 'src', 'index.html'));
+  win.setIcon(path.join(__dirname, 'assets', 'solix icon.ico'));
   win.once('ready-to-show', () => win.show());
 }
 
