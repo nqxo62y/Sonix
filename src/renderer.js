@@ -381,13 +381,14 @@ function renderPlaylist() {
   playlist.forEach((track, i) => {
     const li = document.createElement('li');
     li.className = i === playlistIndex ? 'active' : '';
+    const dur = track.duration > 0 ? fmtTime(track.duration) : '';
     li.innerHTML = `
       <span class="pl-num">${i + 1}</span>
       <div class="pl-info">
-        <div class="pl-title">${esc(track.title)}</div>
-        <div class="pl-artist">${esc(track.artist)}</div>
+        <div class="pl-title">${esc(track.title || 'Unknown')}</div>
+        ${track.artist ? `<div class="pl-artist">${esc(track.artist)}</div>` : ''}
       </div>
-      <span class="pl-dur">${fmtTime(track.duration)}</span>
+      <span class="pl-dur">${dur}</span>
     `;
     li.addEventListener('click', () => playTrack(i));
     ul.appendChild(li);
@@ -399,7 +400,7 @@ function playTrack(index) {
   if (index < 0 || index >= playlist.length) return;
   playlistIndex = index;
   const track = playlist[index];
-  audio.src = track.path;
+  audio.src = 'file:///' + track.path.replace(/\\/g, '/');
   audio.play();
   $('#playerTitle').textContent = track.title || 'Unknown';
   $('#playerArtist').textContent = track.artist || '';
@@ -450,6 +451,10 @@ audio.addEventListener('timeupdate', () => {
 audio.addEventListener('loadedmetadata', () => {
   $('#playerDuration').textContent = fmtTime(audio.duration);
   $('#playerSeek').value = 0;
+  if (playlistIndex >= 0 && playlist[playlistIndex] && !playlist[playlistIndex].duration) {
+    playlist[playlistIndex].duration = audio.duration;
+    renderPlaylist();
+  }
 });
 
 audio.addEventListener('ended', () => {

@@ -108,6 +108,21 @@ ipcMain.handle('binaries:ensure', async (_e) => {
 ipcMain.handle('music:scanFolder', async (_e, folder) => {
   const audioExts = ['.mp3', '.m4a', '.flac', '.wav', '.ogg', '.aac', '.wma'];
   const results = [];
+  const { ytDlp, ffmpeg } = require('./lib/bin');
+  const ffmpegPath = ffmpeg();
+  const ffprobePath = ffmpegPath.replace(/ffmpeg(\.exe)?$/, 'ffprobe$1');
+  const hasProbe = fs.existsSync(ffprobePath);
+
+  function parseFilename(filename) {
+    const name = path.basename(filename, path.extname(filename));
+    const cleaned = name.replace(/^\d+[-.\s]*/, '');
+    if (cleaned.includes(' - ')) {
+      const parts = cleaned.split(' - ');
+      return { title: parts[0].trim(), artist: parts.slice(1).join(' - ').trim() };
+    }
+    return { title: cleaned || name, artist: '' };
+  }
+
   function walk(dir) {
     let entries;
     try { entries = fs.readdirSync(dir, { withFileTypes: true }); } catch { return; }
@@ -116,18 +131,32 @@ ipcMain.handle('music:scanFolder', async (_e, folder) => {
       if (entry.isDirectory()) { walk(full); continue; }
       const ext = path.extname(entry.name).toLowerCase();
       if (!audioExts.includes(ext)) continue;
-      const name = path.basename(entry.name, ext);
-      const parts = name.includes(' - ') ? name.split(' - ') : [name];
-      results.push({
-        path: full,
-        title: parts.length > 1 ? parts[0].trim() : name,
-        artist: parts.length > 1 ? parts.slice(1).join(' - ').trim() : '',
-        duration: 0,
-        cover: null
-      });
+      const { title, artist } = parseFilename(entry.name);
+      results.push({ path: full, title, artist, duration: 0, cover: null });
     }
   }
   walk(folder);
+
+  if (hasProbe && results.length <= 500) {
+    const { execFile } = require('node:child_process');
+    const getDuration = (filePath) => new Promise(resolve => {
+      execFile(ffprobePath, ['-v', 'quiet', '-print_format', 'json', '-show_format', filePath], { windowsHide: true, timeout: 5000 }, (err, stdout) => {
+        if (err) return resolve(0);
+        try {
+          const data = JSON.parse(stdout);
+          resolve(parseFloat(data.format.duration) || 0);
+        } catch { resolve(0); }
+      });
+    });
+
+    const batchSize = 8;
+    for (let i = 0; i < results.length; i += batchSize) {
+      const batch = results.slice(i, i + batchSize);
+      const durations = await Promise.all(batch.map(t => getDuration(t.path)));
+      durations.forEach((d, j) => { results[i + j].duration = d; });
+    }
+  }
+
   return results;
 });
 

@@ -1,6 +1,6 @@
 {
   "name": "sonix",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Premium music downloader. Grab tracks, albums and playlists from Spotify as high-quality MP3/FLAC with embedded artwork and metadata.",
   "main": "main.js",
   "scripts": {
@@ -10,10 +10,13 @@
     "build:portable": "electron-builder --win portable",
     "build:dir": "electron-builder --dir"
   },
+  "dependencies": {
+    "yauzl": "^2.10.0"
+  },
   "build": {
     "appId": "com.sonix.app",
     "productName": "Sonix",
-    "copyright": "Copyright © 2024",
+    "copyright": "Copyright © 2026",
     "directories": {
       "output": "dist",
       "buildResources": "build"
