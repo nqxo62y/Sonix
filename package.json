@@ -1,6 +1,6 @@
 {
   "name": "sonix",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "Premium music downloader. Grab tracks, albums and playlists from Spotify as high-quality MP3/FLAC with embedded artwork and metadata.",
   "main": "main.js",
   "scripts": {

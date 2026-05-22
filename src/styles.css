@@ -54,7 +54,6 @@
 }
 
 .update-badge {
-  display: flex;
   align-items: center;
   gap: 8px;
   padding: 8px 12px;
@@ -67,6 +66,7 @@
   font-weight: 500;
   cursor: pointer;
   transition: background-color 120ms ease;
+  display: none;
 }
 
 .update-badge:hover { opacity: 0.8; }
@@ -873,7 +873,6 @@ select {
 
 .update-btn {
   width: 100%;
-  display: flex;
   align-items: center;
   gap: 10px;
   padding: 10px 12px;
@@ -886,6 +885,9 @@ select {
   font-weight: 500;
   cursor: pointer;
   transition: background-color 120ms ease, transform 80ms ease;
+  display: none;
 }
+
+.update-btn:not([hidden]) { display: flex; }
 
 .update-btn:hover { opacity: 0.85; transform: scale(0.98); }

@@ -243,6 +243,7 @@ $('#btnDownload').onclick = async () => {
     speedLimit: Number(appSettings.speedLimit) || 0,
     timeout: Number(appSettings.timeout) || 30000,
     cookies: appSettings.cookies || '',
+    poToken: appSettings.poToken || '',
     embedCover: appSettings.embedCover !== false,
     artistSeparator: appSettings.artistSeparator || ', ',
     filenameTemplate: appSettings.filenameTemplate,
