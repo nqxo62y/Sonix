@@ -46,7 +46,8 @@
         }
       ],
       "icon": "build/icon.ico",
-      "artifactName": "${productName}-${version}-Setup.${ext}"
+      "artifactName": "${productName}-${version}-Setup.${ext}",
+      "signAndEditExecutable": false
     },
     "nsis": {
       "oneClick": false,

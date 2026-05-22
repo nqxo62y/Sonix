@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/solix icon.ico" width="120" height="120" alt="Sonix"/>
+  <img src="assets/icon.ico" width="120" height="120" alt="Sonix"/>
   <br/><br/>
   <strong style="font-size: 28px;">Sonix</strong>
 </p>
