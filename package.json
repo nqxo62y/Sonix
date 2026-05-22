@@ -10,9 +10,6 @@
     "build:portable": "electron-builder --win portable",
     "build:dir": "electron-builder --dir"
   },
-  "dependencies": {
-    "yauzl": "^2.10.0"
-  },
   "build": {
     "appId": "com.sonix.app",
     "productName": "Sonix",
@@ -26,38 +23,24 @@
       "preload.js",
       "lib/**/*",
       "src/**/*",
-      "bin/**/*",
       "assets/**/*",
-      "themes-example/**/*",
-      "node_modules/**/*"
-    ],
-    "extraResources": [
-      {
-        "from": "bin",
-        "to": "bin",
-        "filter": [
-          "**/*"
-        ]
-      }
+      "themes-example/**/*"
     ],
     "win": {
       "target": [
         {
           "target": "nsis",
-          "arch": [
-            "x64"
-          ]
+          "arch": ["x64"]
         },
         {
           "target": "portable",
-          "arch": [
-            "x64"
-          ]
+          "arch": ["x64"]
         }
       ],
       "icon": "build/icon.ico",
       "artifactName": "${productName}-${version}-Setup.${ext}",
-      "signAndEditExecutable": false
+      "signAndEditExecutable": false,
+      "sign": false
     },
     "nsis": {
       "oneClick": false,
