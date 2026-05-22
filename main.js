@@ -5,7 +5,7 @@ const { downloadJob, cancelAll } = require('./lib/downloader');
 const { resolveSpotifyUrl, setCredentials } = require('./lib/spotify');
 const settings = require('./lib/settings');
 const themes = require('./lib/themes');
-const { checkForUpdates } = require('./lib/updater');
+const { checkForUpdates, downloadAndInstall } = require('./lib/updater');
 const { ensureBinaries } = require('./lib/binSetup');
 
 let win;
@@ -89,6 +89,12 @@ ipcMain.handle('themes:openFolder', () => { shell.openPath(themes.getThemesPath(
 ipcMain.handle('spotify:resolve', (_e, url) => resolveSpotifyUrl(url));
 
 ipcMain.handle('updater:check', () => checkForUpdates());
+
+ipcMain.handle('updater:downloadAndInstall', async (_e, installerUrl) => {
+  return downloadAndInstall(installerUrl, status => {
+    if (win && !win.isDestroyed()) win.webContents.send('updater:status', status);
+  });
+});
 
 ipcMain.handle('binaries:ensure', async (_e) => {
   return new Promise((resolve, reject) => {

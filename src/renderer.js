@@ -384,9 +384,26 @@ let updateInfo = null;
   try {
     updateInfo = await window.api.checkForUpdates();
     if (updateInfo && updateInfo.available) {
-      const badge = $('#updateBadge');
-      badge.hidden = false;
-      badge.addEventListener('click', () => window.api.openExternal(updateInfo.url));
+      if (updateInfo.installerUrl) {
+        $('#loadingStatus').textContent = `Update ${updateInfo.latest} found. Downloading…`;
+        const offUpdaterStatus = window.api.onUpdaterStatus(msg => {
+          $('#loadingStatus').textContent = msg;
+        });
+        try {
+          await window.api.downloadAndInstallUpdate(updateInfo.installerUrl);
+          $('#loadingStatus').textContent = 'Installing update… App will restart.';
+          return;
+        } catch (e) {
+          offUpdaterStatus();
+          const badge = $('#updateBadge');
+          badge.hidden = false;
+          badge.addEventListener('click', () => window.api.openExternal(updateInfo.url));
+        }
+      } else {
+        const badge = $('#updateBadge');
+        badge.hidden = false;
+        badge.addEventListener('click', () => window.api.openExternal(updateInfo.url));
+      }
     }
   } catch {}
 

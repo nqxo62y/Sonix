@@ -30,6 +30,12 @@ contextBridge.exposeInMainWorld('api', {
   resolveSpotify: url => ipcRenderer.invoke('spotify:resolve', url),
 
   checkForUpdates: () => ipcRenderer.invoke('updater:check'),
+  downloadAndInstallUpdate: url => ipcRenderer.invoke('updater:downloadAndInstall', url),
+  onUpdaterStatus: cb => {
+    const l = (_e, msg) => cb(msg);
+    ipcRenderer.on('updater:status', l);
+    return () => ipcRenderer.removeListener('updater:status', l);
+  },
 
   ensureBinaries: () => ipcRenderer.invoke('binaries:ensure'),
   onBinariesStatus: cb => {
