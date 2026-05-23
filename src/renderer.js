@@ -505,6 +505,10 @@ async function loadChangelog() {
   container.innerHTML = '<div class="muted" style="text-align:center;padding:40px 0">Loading changelog\u2026</div>';
   try {
     const releases = await window.api.fetchChangelog();
+    if (releases && releases.error === 'rate-limited') {
+      container.innerHTML = '<div class="muted" style="text-align:center;padding:40px 0">GitHub API rate limit reached. Try again in a few minutes.</div>';
+      return;
+    }
     if (!releases || !releases.length) {
       container.innerHTML = '<div class="muted" style="text-align:center;padding:40px 0">No releases found.</div>';
       return;

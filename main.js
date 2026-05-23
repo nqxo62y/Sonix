@@ -99,6 +99,7 @@ ipcMain.handle('updater:changelog', async () => {
     const res = await fetch('https://api.github.com/repos/nqxo62y/Sonix/releases?per_page=20', {
       headers: { Accept: 'application/vnd.github.v3+json', 'User-Agent': 'Sonix-Updater' }
     });
+    if (res.status === 403 || res.status === 429) return { error: 'rate-limited' };
     if (!res.ok) return [];
     const data = await res.json();
     return data.map(r => ({
